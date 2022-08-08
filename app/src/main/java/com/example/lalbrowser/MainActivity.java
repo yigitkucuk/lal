@@ -5,13 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -21,51 +21,74 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    WebView web_view;
+    StringBuilder ad_servers;
 
     EditText url_input;
     ImageView clear_icon;
     ImageView link_icon;
-    WebView web_view;
     ProgressBar progress_bar;
     ImageView back_arrow, forward_arrow, refresh, share;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        readAdServers();
 
         url_input = findViewById(R.id.url_input);
         clear_icon = findViewById(R.id.clear_icon);
         link_icon = findViewById(R.id.link_icon);
         progress_bar = findViewById(R.id.progress_bar);
-        web_view = findViewById(R.id.web_view);
 
         back_arrow = findViewById(R.id.back_arrow);
         forward_arrow = findViewById(R.id.forward_arrow);
         refresh = findViewById(R.id.refresh);
         share = findViewById(R.id.share);
 
+        web_view = findViewById(R.id.web_view);
+        web_view.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+        web_view.setScrollbarFadingEnabled(true);
+        web_view.setLongClickable(true);
+        web_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        web_view.setWebViewClient(new MyWebViewClient());
+
+        registerForContextMenu(web_view);
+
         WebSettings webSettings = web_view.getSettings();
-        webSettings.setJavaScriptEnabled(true);
+        webSettings.setSupportZoom(true);
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
-        webSettings.setSaveFormData(false);
-        webSettings.setSavePassword(false);
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setAppCacheEnabled(true);
+        webSettings.setAppCachePath(this.getCacheDir().getAbsolutePath());
 
-        web_view.setWebViewClient(new MyWebViewClient());
-        web_view.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public void onProgressChanged (WebView view, int newProgress){
-                super.onProgressChanged(view, newProgress);
-                progress_bar.setProgress(newProgress);
-            }
-        });
+        // Load google.de
+        web_view.loadUrl("duckduckgo.com");
 
-        loadMyUrl("duckduckgo.com");
+        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo ani = cm.getActiveNetworkInfo();
+        if(ani != null && ani.isConnected())
+            webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        else
+            webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+
+        webSettings.setAllowFileAccess(true);
+        webSettings.setJavaScriptEnabled(true);                        // Enable this only if you need JavaScript support!
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(false);   // Enable this only if you want pop-ups!
+        webSettings.setMediaPlaybackRequiresUserGesture(true);
 
         url_input.setOnEditorActionListener((textView, i, keyEvent) -> {
             if(i == EditorInfo.IME_ACTION_GO || i == EditorInfo.IME_ACTION_DONE){
@@ -102,9 +125,25 @@ public class MainActivity extends AppCompatActivity {
             intent.setType("text/plain");
             startActivity(intent);
         });
+    }
 
-        AdBlocker.init(this);
+    private void readAdServers() {
+        String line = "";
+        ad_servers = new StringBuilder();
 
+        InputStream is = this.getResources().openRawResource(R.raw.adblockserverlist);
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+        if(is != null) {
+            try {
+                while ((line = br.readLine()) != null) {
+                    ad_servers.append(line);
+                    ad_servers.append("\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -128,48 +167,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class MyWebViewClient extends WebViewClient {
+    public class MyWebViewClient extends WebViewClient {
 
         @Override
-        public boolean shouldOverrideUrlLoading (WebView view, WebResourceRequest request){
-            return false;
-        }
+        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+            ByteArrayInputStream EMPTY = new ByteArrayInputStream("".getBytes());
+            String kk5 = String.valueOf(ad_servers);
 
-        @Override
-        public void onPageStarted (WebView view, String url, Bitmap favicon){
-            super.onPageStarted(view, url, favicon);
-            url_input.setText(web_view.getUrl());
-            progress_bar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void onPageFinished (WebView view, String url){
-            super.onPageFinished(view, url);
-            progress_bar.setVisibility(View.INVISIBLE);
-        }
-
-    }
-
-    private class MyBrowser extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
-
-        private Map<String, Boolean> loadedUrls = new HashMap<>();
-        @Nullable
-        @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            boolean ad;
-            if (!loadedUrls.containsKey(url)) {
-                ad = AdBlocker.isAd(url);
-                loadedUrls.put(url, ad);
-            } else {
-                ad = loadedUrls.get(url);
+            if (kk5.contains(":::::" + request.getUrl().getHost())) {
+                return new WebResourceResponse("text/plain", "utf-8", EMPTY);
             }
-            return ad ? AdBlocker.createEmptyResource() :
-                    super.shouldInterceptRequest(view, url);
+            return super.shouldInterceptRequest(view, request);
         }
     }
 }
