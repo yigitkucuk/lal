@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -178,6 +179,24 @@ public class MainActivity extends AppCompatActivity {
                 return new WebResourceResponse("text/plain", "utf-8", EMPTY);
             }
             return super.shouldInterceptRequest(view, request);
+        }
+
+        @Override
+        public void onPageStarted (WebView view, String url, Bitmap favicon){
+            super.onPageStarted(view, url, favicon);
+            url_input.setText(web_view.getUrl());
+            progress_bar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onPageFinished (WebView view, String url){
+            super.onPageFinished(view, url);
+            progress_bar.setVisibility(View.INVISIBLE);
+        }
+
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
         }
     }
 }
