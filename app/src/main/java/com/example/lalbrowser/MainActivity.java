@@ -3,6 +3,7 @@ package com.example.lalbrowser;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -38,8 +39,9 @@ public class MainActivity extends AppCompatActivity {
     ImageView clear_icon;
     ImageView link_icon;
     ProgressBar progress_bar;
-    ImageView back_arrow, forward_arrow, refresh, share;
+    ImageView back_arrow, forward_arrow, refresh, share, settings;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         forward_arrow = findViewById(R.id.forward_arrow);
         refresh = findViewById(R.id.refresh);
         share = findViewById(R.id.share);
+        settings = findViewById(R.id.settings);
 
         web_view = findViewById(R.id.web_view);
         web_view.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
@@ -76,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setAppCacheEnabled(true);
         webSettings.setAppCachePath(this.getCacheDir().getAbsolutePath());
 
-        // Load google.de
         web_view.loadUrl("duckduckgo.com");
 
         ConnectivityManager cm = (ConnectivityManager)this.getSystemService(CONNECTIVITY_SERVICE);
@@ -126,6 +128,12 @@ public class MainActivity extends AppCompatActivity {
             intent.setType("text/plain");
             startActivity(intent);
         });
+
+        settings.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this,SettingsActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void readAdServers() {
