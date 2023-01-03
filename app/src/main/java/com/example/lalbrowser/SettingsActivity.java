@@ -11,13 +11,6 @@ import android.widget.ProgressBar;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    WebView web_view;
-    StringBuilder ad_servers;
-
-    EditText url_input;
-    ImageView clear_icon;
-    ImageView link_icon;
-    ProgressBar progress_bar;
     ImageView back_arrow, forward_arrow, refresh, share, settings;
 
     @Override
