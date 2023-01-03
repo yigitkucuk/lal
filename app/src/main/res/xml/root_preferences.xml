@@ -1,38 +1,133 @@
-<PreferenceScreen
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory
-        app:title="@string/messages_header">
+    <PreferenceCategory app:title="Search Engine">
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true"/>
+        <SwitchPreferenceCompat
+            app:key="Google"
+            app:title="Google" />
 
-        <ListPreference
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:defaultValue="reply"
-            app:useSimpleSummaryProvider="true"/>
+        <SwitchPreferenceCompat
+            app:key="DuckDuckGo"
+            app:title="DuckDuckGo" />
+
+        <SwitchPreferenceCompat
+            app:key="Bing"
+            app:title="Bing" />
+
+        <SwitchPreferenceCompat
+            app:key="Yandex"
+            app:title="Yandex" />
+
+        <SwitchPreferenceCompat
+            app:key="Wikipedia"
+            app:title="Wikipedia" />
+
+        <SwitchPreferenceCompat
+            app:key="You.com"
+            app:title="You.com" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="@string/sync_header">
+
+    <PreferenceCategory app:title="Scripting Languages">
 
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title"/>
+            app:key="JavaScript"
+            app:title="JavaScript" />
 
         <SwitchPreferenceCompat
-            app:key="attachment"
-            app:title="@string/attachment_title"
-            app:summaryOn="@string/attachment_summary_on"
-            app:summaryOff="@string/attachment_summary_off"
-            app:dependency="sync"/>
+            app:key="PHP"
+            app:title="PHP" />
+
+        <SwitchPreferenceCompat
+            app:key="Ruby"
+            app:title="Ruby"/>
+
+        <SwitchPreferenceCompat
+            app:key="Rust"
+            app:title="Rust" />
+
+        <SwitchPreferenceCompat
+            app:key="Python"
+            app:title="Python" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory app:title="Markup Languages">
+
+        <SwitchPreferenceCompat
+            app:key="HTML"
+            app:title="HTML" />
+
+        <SwitchPreferenceCompat
+            app:key="XML"
+            app:title="XML" />
+
+        <SwitchPreferenceCompat
+            app:key="Pug"
+            app:title="Pug" />
+
+        <SwitchPreferenceCompat
+            app:key="Jade"
+            app:title="Jade" />
+
+        <SwitchPreferenceCompat
+            app:key="Markdown"
+            app:title="Markdown" />
 
     </PreferenceCategory>
+
+    <PreferenceCategory app:title="Styling Languages">
+
+        <SwitchPreferenceCompat
+            app:key="CSS"
+            app:title="CSS" />
+
+        <SwitchPreferenceCompat
+            app:key="Sass"
+            app:title="Sass" />
+
+        <SwitchPreferenceCompat
+            app:key="Less"
+            app:title="Less" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory app:title="Extensions">
+
+        <SwitchPreferenceCompat
+            app:key="uBlock Origin"
+            app:title="uBlock Origin" />
+
+        <SwitchPreferenceCompat
+            app:key="Privacy Badger"
+            app:title="Privacy Badger" />
+
+        <SwitchPreferenceCompat
+            app:key="QuickLinks"
+            app:title="QuickLinks" />
+
+        <SwitchPreferenceCompat
+            app:key="SuperScript"
+            app:title="SuperScript" />
+
+        <SwitchPreferenceCompat
+            app:key="Dark Reader"
+            app:title="Dark Reader" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Feedback">
+
+        <Preference
+            app:key="feedback"
+            app:title="Send feedback"
+            app:summary="Report technical issues or suggest new features"/>
+
+    </PreferenceCategory>
+
+
+
 
 </PreferenceScreen>
