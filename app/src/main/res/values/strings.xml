@@ -17,4 +17,23 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="title_activity_settings">SettingsActivity</string>
+
+    <string-array name="search_engines">
+        <item>Google</item>
+        <item>DuckDuckGo</item>
+        <item>Yandex</item>
+        <item>Wikipedia</item>
+        <item>Bing</item>
+        <item>You.com</item>
+    </string-array>
+
+    <string-array name="search_engine_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6.com</item>
+    </string-array>
+
 </resources>

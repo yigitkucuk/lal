@@ -3,29 +3,14 @@
 
     <PreferenceCategory app:title="Search Engine">
 
-        <SwitchPreferenceCompat
-            app:key="Google"
-            app:title="Google" />
-
-        <SwitchPreferenceCompat
-            app:key="DuckDuckGo"
-            app:title="DuckDuckGo" />
-
-        <SwitchPreferenceCompat
-            app:key="Bing"
-            app:title="Bing" />
-
-        <SwitchPreferenceCompat
-            app:key="Yandex"
-            app:title="Yandex" />
-
-        <SwitchPreferenceCompat
-            app:key="Wikipedia"
-            app:title="Wikipedia" />
-
-        <SwitchPreferenceCompat
-            app:key="You.com"
-            app:title="You.com" />
+        <ListPreference
+            android:defaultValue="1"
+            android:dialogTitle="Pick a Search Engine"
+            android:entries="@array/search_engines"
+            android:entryValues="@array/search_engine_values"
+            android:key="Search Engines"
+            android:title="Search Engine"
+            android:summary="Pick your preferred search engine" />
 
     </PreferenceCategory>
 
