@@ -46,7 +46,6 @@
             android:inputType="textUri"
             android:imeOptions="actionGo"
             android:singleLine="true"/>
-
     </RelativeLayout>
 
     <View
@@ -131,15 +130,6 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_weight="1"
             android:padding="12dp"/>
-
-
-
     </LinearLayout>
-
-
-
-
-
-
 
 </RelativeLayout>

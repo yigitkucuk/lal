@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         settings.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this,SettingsActivity.class);
+            Intent intent = new Intent(MainActivity.this,MainActivity.class);
             startActivity(intent);
         });
 
