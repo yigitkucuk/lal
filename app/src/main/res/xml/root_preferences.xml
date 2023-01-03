@@ -2,7 +2,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory app:title="Search Engine">
-
         <ListPreference
             android:defaultValue="1"
             android:dialogTitle="Pick a Search Engine"
@@ -114,6 +113,3 @@
     </PreferenceCategory>
 
 </PreferenceScreen>
-
-
-
